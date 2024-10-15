@@ -79,11 +79,13 @@ export default Footer;
 const Container = styled.footer`
   display: flex;
   justify-content: center;
+  padding: 1rem 0;
 `;
 
 const Column = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: start;
   margin: 0 1rem;
 `;
 

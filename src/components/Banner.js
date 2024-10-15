@@ -2,8 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import Text from "./Text";
 import Button from "./Button";
+import { Link } from "react-router-dom";
 
 const Banner = () => {
+  const navToBookingPage = () => {};
   return (
     <BannerContainer>
       <LeftContainer>
@@ -19,9 +21,11 @@ const Banner = () => {
         </Text>
 
         <Button textColor="black">
-          <Text color="black" weight="800">
-            Reserve a Table
-          </Text>
+          <Link to="/booking">
+            <Text color="black" weight="800">
+              Reserve a Table
+            </Text>
+          </Link>
         </Button>
       </LeftContainer>
 
@@ -45,6 +49,15 @@ const BannerContainer = styled.div`
   & > * {
     margin: 0 30px;
   }
+
+  @media screen and (max-width: 1000px) {
+    flex-wrap: wrap-reverse;
+
+    & > div {
+      min-width: 50%;
+      width: 50%;
+    }
+  }
 `;
 
 const LeftContainer = styled.div`
@@ -52,10 +65,18 @@ const LeftContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 2rem 0;
+  min-width: 300px;
 
   button {
     width: fit-content;
     margin-top: auto;
+
+    a {
+      text-decoration: none;
+    }
+    @media screen and (max-width: 1000px) {
+      margin-top: 1rem;
+    }
   }
 `;
 
@@ -65,15 +86,21 @@ const RightContainer = styled.div`
 `;
 
 const ImageContainer = styled.div`
-  border: 1px solid red;
   width: 350px;
   height: 350px;
   overflow: hidden;
   border-radius: 20px;
   position: absolute;
   top: 10px;
+  min-width: 300px;
 
   img {
+    width: 100%;
+    min-width: 300px;
+  }
+
+  @media screen and (max-width: 1000px) {
+    position: relative;
     width: 100%;
   }
 `;

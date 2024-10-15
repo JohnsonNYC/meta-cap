@@ -16,7 +16,7 @@ const specialsMenu = [
     key: 2,
     name: "Bruchetta",
     price: "5.99",
-    path: "/Bruchetta.jpg",
+    path: "/Bruschetta.jpg",
     description:
       "Our Bruschetta is made from grilled bread that has been smeared with garlic and seasoned with salt and olive oil.",
   },
@@ -56,6 +56,11 @@ const CardsContainer = styled.div`
   display: flex;
   justify-content: center;
   gap: 10px;
+
+  @media screen and (max-width: 1000px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const SpecialsContainer = styled.div`
@@ -69,6 +74,7 @@ const Card = ({ foodItem }) => {
       <ImageContainer>
         <img src={path} alt={name} />
       </ImageContainer>
+
       <Title>
         <Text font="markazi" weight="600">
           {name}
@@ -77,6 +83,7 @@ const Card = ({ foodItem }) => {
           {price}
         </Text>
       </Title>
+
       <Text>{description}</Text>
 
       <Text font="markazi" weight="500">
@@ -92,15 +99,16 @@ const SpecialHeader = styled.div`
   margin-bottom: 4rem;
 
   & > span {
-    border: 1px solid red;
     width: 52%;
   }
 `;
 const Title = styled.div`
   display: flex;
+  & > span:last-of-type {
+    margin-left: auto;
+  }
 `;
 const CardContainer = styled.div`
-  border: 1px solid red;
   border-top-right-radius: 20px;
   border-top-left-radius: 20px;
   display: flex;
@@ -108,16 +116,25 @@ const CardContainer = styled.div`
   max-width: 20vw;
   height: 50vh;
   overflow: hidden;
+  border: 1px solid var(--black);
+
+  & > *:not(:first-child) {
+    padding: 0.5rem;
+  }
 
   & > span:last-of-type {
-    border: 1px solid red;
     margin-top: auto;
-    margin-bottom: 2rem;
+  }
+
+  @media screen and (max-width: 1000px) {
+    max-width: 50vw;
   }
 `;
 
 const ImageContainer = styled.div`
   width: 100%;
+  height: 50%;
+  overflow: hidden;
 
   img {
     width: 100%;

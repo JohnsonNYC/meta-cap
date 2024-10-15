@@ -11,9 +11,17 @@ const Text = ({
   font = "karla",
   weight = 100,
   color,
+  ...rest
 }) => {
   return (
-    <StyledText as={as} size={size} font={font} weight={weight} color={color}>
+    <StyledText
+      as={as}
+      size={size}
+      font={font}
+      weight={weight}
+      color={color}
+      {...rest}
+    >
       {children}
     </StyledText>
   );
