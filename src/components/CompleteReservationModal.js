@@ -244,6 +244,7 @@ const LeftContainer = styled.div`
     flex-direction: column;
     & > textarea {
       margin-top: 0.5rem;
+      resize: none;
     }
   }
 `;
