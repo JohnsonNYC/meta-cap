@@ -27,19 +27,30 @@ export const formatDate = (inputDate) => {
   return input.toLocaleDateString("en-US", options);
 };
 
-export const formatTime = (date) => {
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  const ampm = hours >= 12 ? "PM" : "AM";
-  const formattedHours = hours % 12 || 12; // Convert to 12-hour format
-  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-  return `${formattedHours}:${formattedMinutes} ${ampm}`;
+export const convertTimeFormat = (timeArray, format = "12") => {
+  if (!timeArray) return "";
+
+  return timeArray.map((time) => {
+    let [hours, minutes] = time.split(":");
+    hours = parseInt(hours, 10);
+    minutes = parseInt(minutes, 10);
+
+    if (format === "12") {
+      const period = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12 || 12; // Convert 0 to 12 for 12 AM
+      return `${hours}:${minutes.toString().padStart(2, "0")} ${period}`;
+    } else {
+      // Return in 24-hour format
+      return `${hours.toString().padStart(2, "0")}:${minutes
+        .toString()
+        .padStart(2, "0")}`;
+    }
+  });
 };
 
-export const getTodayDate = () => {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0"); // Months are 0-based
-  const day = String(today.getDate()).padStart(2, "0");
+export const getSelectedDate = (date = new Date()) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+  const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };

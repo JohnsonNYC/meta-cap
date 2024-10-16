@@ -2,13 +2,21 @@ import React, { useState, useEffect } from "react";
 import Modal from "./Modal";
 import Text from "./Text";
 import Button from "./Button";
+
+import { isValidPhoneNumber, isValidEmail } from "../utils/strings";
+import { submitAPI } from "../utils/api";
+
 import styled from "styled-components";
+import JSConfetti from "js-confetti";
 
 const CompleteReservationModal = ({ isOpen, onClose, reservationData }) => {
   const { date, numGuests, time } = reservationData || {};
 
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const [specialOccasion, setSpecialOccasion] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const formatDateTime = (dateStr, timeStr) => {
     // Combine the date and time strings into a single string for parsing
@@ -31,21 +39,70 @@ const CompleteReservationModal = ({ isOpen, onClose, reservationData }) => {
     return new Intl.DateTimeFormat("en-US", options).format(dateTime);
   };
 
+  const errorHandler = (type) => {
+    if (type === "phone" && !isValidPhoneNumber(phone) && !email)
+      setError("Please provide a valid phone number");
+    if (type === "email" && !isValidEmail(email) && !phone)
+      setError("Please provide a valid email");
+
+    setTimeout(() => {
+      setError("");
+    }, 4000);
+  };
+
+  const submitReservation = () => {
+    let res = submitAPI();
+    setIsSuccess(res);
+
+    setTimeout(() => {
+      setIsSuccess(false);
+    }, 3000);
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      const jsConfetti = new JSConfetti();
+      jsConfetti.addConfetti();
+
+      setTimeout(() => {
+        jsConfetti.clearCanvas();
+      }, 3000);
+    }
+  }, [isSuccess]);
+
+  const isSubmittable =
+    (phone.length && isValidPhoneNumber(phone)) ||
+    (email.length && isValidEmail(email));
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <Container>
         <LeftContainer>
-          <Text size="lg" weight="800">
+          <Text size="xl" weight="800">
             Complete Your Reservation
           </Text>
           <Text size="md" weight="600">
             Little Lemon
           </Text>
 
-          <Text className="selected-time">{formatDateTime(date, time)}</Text>
+          <Text className="selected-time" weight="600">
+            {formatDateTime(date, time)}
+          </Text>
           <Text className="selected-guests">
             {numGuests} Guests, Dining Room
           </Text>
+
+          <div className="special-occasion-wrapper">
+            <Text size="sm" font="karla" weight="500">
+              Is there a Special Occasion?
+            </Text>
+
+            <textarea
+              value={specialOccasion}
+              placeholder="(Birthday, Anniversary)"
+              onChange={(e) => setSpecialOccasion(e.target.value)}
+            />
+          </div>
 
           <div className="cancellation-policy">
             <Text as="div" size="sm">
@@ -80,13 +137,21 @@ const CompleteReservationModal = ({ isOpen, onClose, reservationData }) => {
         <RightContainer>
           <Form>
             <label>Phone Number</label>
-            <input value={phone} onChange={(e) => setPhone(e.target.value)} />
+            <input
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              onBlur={() => errorHandler("phone")}
+            />
 
             <Text as="div" weight="800">
               OR
             </Text>
             <label>Email</label>
-            <input value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              onBlur={() => errorHandler("email")}
+            />
 
             <Text size="sm">
               This will be used to notify you of your upcoming reservations
@@ -95,7 +160,9 @@ const CompleteReservationModal = ({ isOpen, onClose, reservationData }) => {
         </RightContainer>
       </Container>
       <Button
+        disabled={!isSubmittable}
         bgColor="yellow"
+        onClick={submitReservation}
         style={{
           width: "80%",
           height: "50px",
@@ -107,6 +174,16 @@ const CompleteReservationModal = ({ isOpen, onClose, reservationData }) => {
           Reserve Now
         </Text>
       </Button>
+      {error ? (
+        <Text
+          as="div"
+          color="red"
+          weight="500"
+          style={{ textAlign: "center", marginTop: "1rem" }}
+        >
+          {error}
+        </Text>
+      ) : null}
     </Modal>
   );
 };
@@ -149,10 +226,19 @@ const LeftContainer = styled.div`
   }
 
   .cancellation-policy {
-    margin: 4rem 0;
+    margin: 2rem 0;
 
     & > div {
       margin: 1rem 0;
+    }
+  }
+
+  .special-occasion-wrapper {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    & > textarea {
+      margin-top: 0.5rem;
     }
   }
 `;

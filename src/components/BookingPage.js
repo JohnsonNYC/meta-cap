@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { getTodayDate } from "../utils/dates";
+import { getSelectedDate, convertTimeFormat } from "../utils/dates";
+import { fetchAPI } from "../utils/api";
+
 import Header from "./Header";
 import ReservationBanner from "./ReservationBanner";
 import TimeSelection from "./TimeSelection";
 import Footer from "./Footer";
 import CompleteReservationModal from "./CompleteReservationModal";
 
+const today = new Date();
 const BookingPage = () => {
+  // SELECTION
   const [numGuests, setNumGuests] = useState(2);
-  const [date, setDate] = useState(getTodayDate());
+  const [date, setDate] = useState(getSelectedDate());
   const [time, setTime] = useState("");
+
+  // API DATA
+  const [availableTimes, setAvailableTimes] = useState([]);
+  const AVAILABLE_TIME = convertTimeFormat(availableTimes);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -20,13 +28,33 @@ const BookingPage = () => {
   };
 
   const handleDateChange = (e) => {
-    setDate(e.target.value);
+    const { value } = e.target;
+    setDate(value);
+  };
+
+  const handleTimeChange = (e) => {
+    const { value } = e.target;
+    setTime(value);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setTime("");
   };
+
+  const initalizeTimes = () => {
+    let res = fetchAPI(today);
+    setAvailableTimes(res);
+  };
+
+  useEffect(() => {
+    initalizeTimes();
+  }, []);
+
+  useEffect(() => {
+    //Anytime date is changed - update the Times
+    initalizeTimes();
+  }, [date]);
 
   useEffect(() => {
     if (numGuests && date && time) setIsModalOpen(true);
@@ -41,10 +69,15 @@ const BookingPage = () => {
           handleGuestChange={handleGuestChange}
           numGuests={numGuests}
           date={date}
-          time={time}
           handleDateChange={handleDateChange}
+          time={time}
+          handleTimeChange={handleTimeChange}
         />
-        <TimeSelection time={time} setTime={setTime} />
+        <TimeSelection
+          time={time}
+          setTime={setTime}
+          AVAILABLE_TIME={AVAILABLE_TIME}
+        />
       </main>
       <Footer />
       <CompleteReservationModal

@@ -1,32 +1,31 @@
 import React from "react";
 import Text from "./Text";
 import styled from "styled-components";
-import { formatTime } from "../utils/dates";
 
-const generateTimes = (startHour, endHour) => {
-  const times = [];
-  const startDate = new Date();
-  startDate.setHours(startHour, 0, 0, 0);
-
-  const endDate = new Date();
-  endDate.setHours(endHour, 0, 0, 0);
-
-  while (startDate <= endDate) {
-    times.push(formatTime(startDate));
-    startDate.setMinutes(startDate.getMinutes() + 15);
-  }
-  return times;
-};
-
-const TimeSelection = ({ time, setTime }) => {
-  const times = generateTimes(11, 18);
-
+const TimeSelection = ({ AVAILABLE_TIME, time, setTime }) => {
   return (
-    <Container>
-      {times.map((timeEl, id) => (
-        <TimeTile key={id} timeEl={timeEl} setTime={setTime} time={time} />
-      ))}
-    </Container>
+    <>
+      <Text
+        as="div"
+        weight="600"
+        size="lg"
+        style={{ textAlign: "center", marginBottom: "1rem" }}
+      >
+        Select a Time
+      </Text>
+      <Container>
+        {AVAILABLE_TIME.length
+          ? AVAILABLE_TIME.map((timeEl, id) => (
+              <TimeTile
+                key={id}
+                timeEl={timeEl}
+                setTime={setTime}
+                time={time}
+              />
+            ))
+          : null}
+      </Container>
+    </>
   );
 };
 

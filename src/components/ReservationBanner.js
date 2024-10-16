@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Text from "./Text";
-import { getTodayDate } from "../utils/dates";
+import { getSelectedDate } from "../utils/dates";
 
 const ReservationBanner = ({
   numGuests,
@@ -25,7 +25,7 @@ const ReservationBanner = ({
 
         <SelectionContainer>
           <FormGroup>
-            <label for="guest-number">Guest</label>
+            <label htmlFor="guest-number">Number of Guests</label>
             <input
               id="guest-number"
               name="guest-number"
@@ -36,20 +36,26 @@ const ReservationBanner = ({
           </FormGroup>
 
           <FormGroup>
-            <label for="date-picker">Date</label>
+            <label htmlFor="date-picker">Date</label>
             <input
               id="date-picker"
               name="date"
               type="date"
               value={date}
-              onChange={handleDateChange}
-              min={getTodayDate()}
+              onChange={(e) => handleDateChange(e)}
+              min={getSelectedDate()}
             />
           </FormGroup>
 
           <FormGroup>
-            <label for="time">Time</label>
-            <input id="time" name="time" value={time} />
+            <label htmlFor="time">Time</label>
+            <input
+              id="time"
+              name="time"
+              value={time}
+              placeholder="Select From Below"
+              readOnly
+            />
           </FormGroup>
         </SelectionContainer>
       </LeftContainer>
