@@ -50,26 +50,26 @@ describe("BookingPage Component", () => {
     expect(footerText).toBeInTheDocument();
   });
 
-  // test("opens modal when all fields are filled", () => {
-  //   // Add a modal root div to the DOM for React Portals
-  //   const modalRoot = document.createElement("div");
-  //   modalRoot.setAttribute("id", "portal-root");
-  //   document.body.appendChild(modalRoot);
+  test("opens modal when all fields are filled", () => {
+    // Add a modal root div to the DOM for React Portals
+    const modalRoot = document.createElement("div");
+    modalRoot.setAttribute("id", "portal-root");
+    document.body.appendChild(modalRoot);
 
-  //   render(<BookingPage />);
+    render(<BookingPage />);
 
-  //   const guestInput = screen.getByLabelText(/Number of Guests/i);
-  //   fireEvent.change(guestInput, { target: { value: 4 } });
+    const guestInput = screen.getByLabelText(/Number of Guests/i);
+    fireEvent.change(guestInput, { target: { value: 4 } });
 
-  //   const dateInput = screen.getByLabelText(/Date/i);
-  //   fireEvent.change(dateInput, { target: { value: "2024-10-17" } });
+    const dateInput = screen.getByLabelText(/Date/i);
+    fireEvent.change(dateInput, { target: { value: "2024-10-17" } });
 
-  //   const timeInput = screen.getByText(/10:00 PM/i);
-  //   fireEvent.click(timeInput);
+    const timeInput = screen.getByText(/10:00 PM/i);
+    fireEvent.click(timeInput);
 
-  //   const modal = screen.getByText("Complete Your Reservation");
-  //   expect(modal).toBeInTheDocument();
+    const modal = screen.getByText("Complete Your Reservation");
+    expect(modal).toBeInTheDocument();
 
-  //   document.body.removeChild(modalRoot);
-  // });
+    document.body.removeChild(modalRoot);
+  });
 });

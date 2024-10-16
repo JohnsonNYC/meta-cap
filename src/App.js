@@ -1,5 +1,5 @@
-import HomePage from "./components/HomePage";
-import BookingPage from "./components/BookingPage";
+import HomePage from "./pages/HomePage";
+import BookingPage from "./pages/BookingPage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {

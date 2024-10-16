@@ -23,5 +23,8 @@ export const fetchAPI = function (date) {
 };
 
 export const submitAPI = function (formData) {
-  return true;
+  if (!formData) return "Please select valid dates and times";
+  const { date, numGuests, time } = formData || {};
+  if (date && numGuests && time) return true;
+  else return "Please review your selections";
 };

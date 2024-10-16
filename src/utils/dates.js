@@ -1,3 +1,23 @@
+export const isValidDate = (dateString) => {
+  // Regular expression to check format "YYYY-MM-DD"
+  const regex = /^\d{4}-\d{2}-\d{2}$/;
+
+  // Check if the date string matches the regex
+  if (!regex.test(dateString)) return false;
+
+  // Parse the date parts
+  const [year, month, day] = dateString.split("-").map(Number);
+
+  // Check if the year, month, and day are valid
+  const date = new Date(year, month - 1, day); // month is 0-indexed in JS Date
+
+  return (
+    date.getFullYear() === year &&
+    date.getMonth() === month - 1 &&
+    date.getDate() === day
+  );
+};
+
 export const formatDate = (inputDate) => {
   // Get today's date and clear the time part
   const today = new Date();

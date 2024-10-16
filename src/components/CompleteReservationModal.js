@@ -4,6 +4,7 @@ import Text from "./Text";
 import Button from "./Button";
 
 import { isValidPhoneNumber, isValidEmail } from "../utils/strings";
+import { isValidDate } from "../utils/dates";
 import { submitAPI } from "../utils/api";
 
 import styled from "styled-components";
@@ -51,8 +52,10 @@ const CompleteReservationModal = ({ isOpen, onClose, reservationData }) => {
   };
 
   const submitReservation = () => {
-    let res = submitAPI();
-    setIsSuccess(res);
+    let res = submitAPI(reservationData);
+
+    if (res === true) setIsSuccess(res);
+    else setError(res);
 
     setTimeout(() => {
       setIsSuccess(false);
@@ -74,6 +77,7 @@ const CompleteReservationModal = ({ isOpen, onClose, reservationData }) => {
     (phone.length && isValidPhoneNumber(phone)) ||
     (email.length && isValidEmail(email));
 
+  if (!isValidDate(date) && numGuests > 1) return null;
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <Container>
@@ -160,6 +164,7 @@ const CompleteReservationModal = ({ isOpen, onClose, reservationData }) => {
         </RightContainer>
       </Container>
       <Button
+        aria-label="On Click"
         disabled={!isSubmittable}
         bgColor="yellow"
         onClick={submitReservation}

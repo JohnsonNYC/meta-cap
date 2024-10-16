@@ -22,7 +22,10 @@ const Header = () => {
 
           <Container>
             {isMobile ? (
-              <motion.div onClick={() => setIsOpen(!isOpen)}>
+              <motion.div
+                onClick={() => setIsOpen(!isOpen)}
+                aria-label="On Click"
+              >
                 {isOpen ? (
                   <motion.div initial={{ rotate: 90 }} animate={{ rotate: 0 }}>
                     <X />

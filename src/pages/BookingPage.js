@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { getSelectedDate, convertTimeFormat } from "../utils/dates";
+import {
+  getSelectedDate,
+  convertTimeFormat,
+  isValidDate,
+} from "../utils/dates";
 import { fetchAPI } from "../utils/api";
 
-import Header from "./Header";
-import ReservationBanner from "./ReservationBanner";
-import TimeSelection from "./TimeSelection";
-import Footer from "./Footer";
-import CompleteReservationModal from "./CompleteReservationModal";
+import Header from "../components/Header";
+import ReservationBanner from "../components/ReservationBanner";
+import TimeSelection from "../components/TimeSelection";
+import Footer from "../components/Footer";
+import CompleteReservationModal from "../components/CompleteReservationModal";
 
 const today = new Date();
 const BookingPage = () => {
@@ -14,6 +18,7 @@ const BookingPage = () => {
   const [numGuests, setNumGuests] = useState(2);
   const [date, setDate] = useState(getSelectedDate());
   const [time, setTime] = useState("");
+  const [error, setError] = useState("");
 
   // API DATA
   const [availableTimes, setAvailableTimes] = useState([]);
@@ -21,6 +26,17 @@ const BookingPage = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const handleError = (type) => {
+    if (type == "guest" && numGuests < 1)
+      setError("Make sure to select a number of guests");
+    if (type == "date" && !isValidDate(date))
+      setError("Please pick a valid date");
+    if (type == "time" && !time) setError("Please select a time");
+
+    setTimeout(() => {
+      setError("");
+    }, 3000);
+  };
   const handleGuestChange = (e) => {
     const val = e.target.value;
     if (val < 0) return;
@@ -57,7 +73,8 @@ const BookingPage = () => {
   }, [date]);
 
   useEffect(() => {
-    if (numGuests && date && time) setIsModalOpen(true);
+    if (numGuests > 1 && date && isValidDate(date) && time)
+      setIsModalOpen(true);
     else setIsModalOpen(false);
   }, [numGuests, date, time]);
 
@@ -72,6 +89,8 @@ const BookingPage = () => {
           handleDateChange={handleDateChange}
           time={time}
           handleTimeChange={handleTimeChange}
+          handleError={handleError}
+          error={error}
         />
         <TimeSelection
           time={time}

@@ -2,13 +2,16 @@ import React from "react";
 import styled from "styled-components";
 import Text from "./Text";
 import { getSelectedDate } from "../utils/dates";
+import { motion } from "framer-motion";
 
 const ReservationBanner = ({
+  error,
   numGuests,
-  handleGuestChange,
-  handleDateChange,
   date,
   time,
+  handleGuestChange,
+  handleDateChange,
+  handleError,
 }) => {
   return (
     <Container>
@@ -32,6 +35,8 @@ const ReservationBanner = ({
               value={numGuests}
               type="number"
               onChange={(e) => handleGuestChange(e)}
+              onBlur={() => handleError("guest")}
+              min="2"
             />
           </FormGroup>
 
@@ -43,6 +48,7 @@ const ReservationBanner = ({
               type="date"
               value={date}
               onChange={(e) => handleDateChange(e)}
+              onBlur={() => handleError("date")}
               min={getSelectedDate()}
             />
           </FormGroup>
@@ -58,6 +64,9 @@ const ReservationBanner = ({
             />
           </FormGroup>
         </SelectionContainer>
+        <ErrorMessage color="red" weight="600">
+          {error}
+        </ErrorMessage>
       </LeftContainer>
 
       <RightContainer>
@@ -71,12 +80,15 @@ const ReservationBanner = ({
 
 export default ReservationBanner;
 
+const ErrorMessage = styled(motion.div)`
+  color: var(--red);
+  font-weight: 600;
+`;
 const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   margin: 0 0.5rem;
-  width: 33%;
   padding: 0 0.5rem;
 
   &:not(:last-of-type) {
@@ -100,8 +112,11 @@ const SelectionContainer = styled.div`
   border-radius: 20px;
   display: flex;
   justify-content: center;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0;
   margin-top: 4rem;
+  & > * {
+    flex-grow: 1;
+  }
 `;
 
 const ImageContainer = styled.div`
